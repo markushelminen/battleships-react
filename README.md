@@ -1,4 +1,6 @@
 TODO
 
 -   Context?
--   Show hits on player grid
+-   Check the computer algorithm for shooting the player
+-   Styling
+-   Win condition
