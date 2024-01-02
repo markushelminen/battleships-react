@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { Game, Grid } from "../../types/types";
 import PlayerGridComponent from "../Grid/PlayerGridComponent";
 import ComputerGridComponent from "../Grid/ComputerGridComponent";
@@ -13,13 +13,14 @@ type GameProps = {
 const GameComponent = (props: GameProps) => {
     const game = useContext(GameContext);
 
-    let playerGrid: Grid = makeEmptyGrid();
+    const [playerGrid, setPlayerGrid] = useState<Grid>(makeEmptyGrid());
     let computerGrid: Grid = getEnemyFleet();
 
-    const shotsLanded = 0;
-    const lastShotLandedCount = 0;
+    let shotsLanded = 0;
+    let lastShotLandedCount = 0;
     let firstBoatCell = 0;
     let orientationCounter = 0;
+    let lastShotCell = -1;
 
     const handleVerticalChange = () => {
         props.updateGame({
@@ -40,7 +41,7 @@ const GameComponent = (props: GameProps) => {
             hasStarted: false,
             vertical: game.vertical,
         });
-        playerGrid = makeEmptyGrid();
+        setPlayerGrid(makeEmptyGrid());
         computerGrid = getEnemyFleet();
     };
 
@@ -48,7 +49,7 @@ const GameComponent = (props: GameProps) => {
         if (orientationCounter === 0 && lastShotLandedCount === 0) {
             firstBoatCell = -1;
         }
-        let firedCellNumber;
+        let firedCellNumber = -1;
         [firedCellNumber, orientationCounter] = computerCellToShoot(
             playerGrid,
             shotsLanded,
@@ -57,12 +58,39 @@ const GameComponent = (props: GameProps) => {
             orientationCounter
         );
         console.log("Number: " + firedCellNumber);
+
+        updatePlayer(firedCellNumber);
+
+        if (playerGrid[firedCellNumber].boat === true) {
+            if (orientationCounter === 0) {
+                orientationCounter = 1;
+                firstBoatCell = firedCellNumber;
+            }
+            lastShotLandedCount++;
+            shotsLanded++;
+            lastShotCell = firedCellNumber;
+        } else {
+            lastShotLandedCount = 0;
+        }
+        // computerFiredShots.push(firedCellNumber);
+        // dispatch("isgameover")
     };
+
+    function updatePlayer(cellNumber: number) {
+        console.log(playerGrid);
+        const newGrid = [...playerGrid];
+        newGrid[cellNumber].clicked = true;
+        setPlayerGrid(newGrid);
+    }
+
+    function updateGrid(newGrid: Grid) {
+        setPlayerGrid(newGrid);
+    }
 
     return (
         <>
             <div className="flex justify-center">
-                <PlayerGridComponent start={startGame} grid={playerGrid}></PlayerGridComponent>
+                <PlayerGridComponent start={startGame} updateGrid={updateGrid} grid={playerGrid}></PlayerGridComponent>
                 <section className="flex flex-col gap-4 m-2">
                     <p>Place Your Boats</p>
                     <div className="flex items-center">

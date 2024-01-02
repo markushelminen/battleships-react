@@ -1,4 +1,4 @@
 TODO
 
 -   Context?
--   Computer shooting back
+-   Show hits on player grid

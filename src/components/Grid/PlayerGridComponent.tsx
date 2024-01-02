@@ -8,10 +8,11 @@ import { placeBoat } from "../../services/playerService";
 type GridProps = {
     grid: Grid;
     start: () => void;
+    updateGrid: (x: Grid) => void;
 };
 
 const PlayerGridComponent = (props: GridProps) => {
-    const [grid, setGrid] = useState<Cell[]>(props.grid);
+    const grid = props.grid;
     const [boatCounter, setBoatCounter] = useState<number>(boats.length - 1);
     const game = useContext(GameContext);
 
@@ -20,7 +21,7 @@ const PlayerGridComponent = (props: GridProps) => {
             const boat = boats[boatCounter];
             const nextGrid = placeBoat(cell, boat, game.vertical, grid);
             if (!nextGrid) return;
-            setGrid(nextGrid);
+            props.updateGrid(nextGrid);
             setBoatCounter(boatCounter - 1);
         }
     };
@@ -32,12 +33,12 @@ const PlayerGridComponent = (props: GridProps) => {
                     if (cell.number + 10 * (boat.size - 1) > 99) return;
                     const nextGrid = [...grid];
                     nextGrid[cell.number + 10 * i].hover = true;
-                    setGrid(nextGrid);
+                    props.updateGrid(nextGrid);
                 } else {
                     if (cell.number % 10 > 10 - boat.size) return;
                     const nextGrid = [...grid];
                     nextGrid[cell.number + i].hover = true;
-                    setGrid(nextGrid);
+                    props.updateGrid(nextGrid);
                 }
             }
         }
@@ -51,12 +52,12 @@ const PlayerGridComponent = (props: GridProps) => {
                     if (cell.number + 10 * (boat.size - 1) > 99) return;
                     const nextGrid = [...grid];
                     nextGrid[cell.number + 10 * i].hover = false;
-                    setGrid(nextGrid);
+                    props.updateGrid(nextGrid);
                 } else {
                     if (cell.number % 10 > 10 - boat.size) return;
                     const nextGrid = [...grid];
                     nextGrid[cell.number + i].hover = false;
-                    setGrid(nextGrid);
+                    props.updateGrid(nextGrid);
                 }
             }
         }
