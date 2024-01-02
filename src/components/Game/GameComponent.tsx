@@ -3,7 +3,7 @@ import { Game, Grid } from "../../types/types";
 import PlayerGridComponent from "../Grid/PlayerGridComponent";
 import ComputerGridComponent from "../Grid/ComputerGridComponent";
 import { makeEmptyGrid } from "../../services/gameService";
-import { getEnemyFleet } from "../../services/computerService";
+import { computerCellToShoot, getEnemyFleet } from "../../services/computerService";
 import GameContext from "../../services/context";
 
 type GameProps = {
@@ -15,6 +15,11 @@ const GameComponent = (props: GameProps) => {
 
     let playerGrid: Grid = makeEmptyGrid();
     let computerGrid: Grid = getEnemyFleet();
+
+    const shotsLanded = 0;
+    const lastShotLandedCount = 0;
+    let firstBoatCell = 0;
+    let orientationCounter = 0;
 
     const handleVerticalChange = () => {
         props.updateGame({
@@ -39,6 +44,21 @@ const GameComponent = (props: GameProps) => {
         computerGrid = getEnemyFleet();
     };
 
+    const shootPlayer = () => {
+        if (orientationCounter === 0 && lastShotLandedCount === 0) {
+            firstBoatCell = -1;
+        }
+        let firedCellNumber;
+        [firedCellNumber, orientationCounter] = computerCellToShoot(
+            playerGrid,
+            shotsLanded,
+            lastShotLandedCount,
+            firstBoatCell,
+            orientationCounter
+        );
+        console.log("Number: " + firedCellNumber);
+    };
+
     return (
         <>
             <div className="flex justify-center">
@@ -56,7 +76,7 @@ const GameComponent = (props: GameProps) => {
                         <button className="bg-cyan-600 hover:bg-cyan-700 rounded-lg py-2 px-4 text-white">Start</button>
                     )}
                 </section>
-                <ComputerGridComponent grid={computerGrid}></ComputerGridComponent>
+                <ComputerGridComponent shootPlayer={shootPlayer} grid={computerGrid}></ComputerGridComponent>
             </div>
         </>
     );

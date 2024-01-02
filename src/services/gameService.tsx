@@ -1,4 +1,4 @@
-import { Boat, Cell, Grid } from "../types/types";
+import { Boat, Grid } from "../types/types";
 
 export const boats: Boat[] = [
     {

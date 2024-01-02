@@ -3,6 +3,7 @@ import { boats } from "../../services/gameService";
 import { Cell, Grid } from "../../types/types";
 import PlayerCellComponent from "../Cell/PlayerCellComponent";
 import GameContext from "../../services/context";
+import { placeBoat } from "../../services/playerService";
 
 type GridProps = {
     grid: Grid;
@@ -14,23 +15,12 @@ const PlayerGridComponent = (props: GridProps) => {
     const [boatCounter, setBoatCounter] = useState<number>(boats.length - 1);
     const game = useContext(GameContext);
 
-    const placeBoat = (cell: Cell) => {
+    const placeBoatGrid = (cell: Cell) => {
         if (!game.hasStarted && boatCounter !== -1) {
             const boat = boats[boatCounter];
-
-            for (let i = 0; i < boat.size; i++) {
-                if (game.vertical) {
-                    if (cell.number + 10 * (boat.size - 1) > 99) return;
-                    const nextGrid = [...grid];
-                    nextGrid[cell.number + 10 * i].boat = true;
-                    setGrid(nextGrid);
-                } else {
-                    if (cell.number % 10 > 10 - boat.size) return;
-                    const nextGrid = [...grid];
-                    nextGrid[cell.number + i].boat = true;
-                    setGrid(nextGrid);
-                }
-            }
+            const nextGrid = placeBoat(cell, boat, game.vertical, grid);
+            if (!nextGrid) return;
+            setGrid(nextGrid);
             setBoatCounter(boatCounter - 1);
         }
     };
@@ -40,8 +30,6 @@ const PlayerGridComponent = (props: GridProps) => {
             for (let i = 0; i < boat.size; i++) {
                 if (game.vertical) {
                     if (cell.number + 10 * (boat.size - 1) > 99) return;
-                    console.log("asd");
-
                     const nextGrid = [...grid];
                     nextGrid[cell.number + 10 * i].hover = true;
                     setGrid(nextGrid);
@@ -89,7 +77,7 @@ const PlayerGridComponent = (props: GridProps) => {
                                 cell={cell}
                                 showBoat={showBoat}
                                 hideBoat={hideBoat}
-                                placeBoat={placeBoat}
+                                placeBoat={placeBoatGrid}
                             ></PlayerCellComponent>
                         );
                     })}

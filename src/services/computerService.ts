@@ -85,7 +85,6 @@ export function computerCellToShoot(
         orientationCounter = 0;
         cellToShoot = randomCellToShoot(grid);
     }
-    console.log(cellToShoot);
     return [cellToShoot, orientationCounter];
 }
 
@@ -100,8 +99,6 @@ function randomCellToShoot(grid: Grid): number {
             shotValid = true;
         }
     }
-    console.log("random cell");
-
     return cell;
 }
 

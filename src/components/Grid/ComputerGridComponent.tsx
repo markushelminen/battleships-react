@@ -4,6 +4,7 @@ import ComputerCellComponent from "../Cell/ComputerCellComponent";
 
 type GridProps = {
     grid: Grid;
+    shootPlayer: () => void;
 };
 
 const ComputerGridComponent = (props: GridProps) => {
@@ -12,6 +13,7 @@ const ComputerGridComponent = (props: GridProps) => {
         const nextGrid = [...grid];
         nextGrid[cell.number].clicked = true;
         setGrid(nextGrid);
+        props.shootPlayer();
     };
     return (
         <div>

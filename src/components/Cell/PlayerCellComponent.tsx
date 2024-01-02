@@ -12,7 +12,7 @@ const PlayerCellComponent = (props: CellProps) => {
             className={`
                 text-xs text-center w-10 h-10 
                 ${props.cell.hover && !props.cell.boat ? "bg-gray-600" : ""}
-                ${props.cell.boat ? "bg-black" : ""}
+                ${props.cell.boat ? "bg-blue-800" : ""}
                 `}
             onClick={() => props.placeBoat(props.cell)}
             onMouseEnter={() => props.showBoat(props.cell)}
