@@ -57,6 +57,7 @@ const GameComponent = (props: GameProps) => {
             firstBoatCell,
             orientationCounter
         );
+        lastShotCell = firedCellNumber;
         console.log("Number: " + firedCellNumber);
 
         updatePlayer(firedCellNumber);
@@ -77,7 +78,6 @@ const GameComponent = (props: GameProps) => {
     };
 
     function updatePlayer(cellNumber: number) {
-        console.log(playerGrid);
         const newGrid = [...playerGrid];
         newGrid[cellNumber].clicked = true;
         setPlayerGrid(newGrid);

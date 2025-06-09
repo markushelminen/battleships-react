@@ -7,7 +7,6 @@ export function getEnemyFleet() {
     for (let i = 0; i < boats.length; i++) {
         enemyGrid = placeBoat(boats[boats.length - 1 - i], enemyGrid);
     }
-
     return enemyGrid;
 }
 
